@@ -1,54 +1,33 @@
-#include <serv.h>
-#include<Servo.h>
-#include <string.h>
-Servo microServo;
-int servoPin = 10;
+#include "serv.h"
 
+//Функция считывающая имена
+String command = "";
+String commandName(String y)
+{
+  String letters = "";
+  int spacePosition = -1;
+  for (int count = 0; count < y.length(); count++)
+  {
+    if (y[count] == ' ')
+    {
+      spacePosition = count;
+    }
+  }
+
+  if (spacePosition >= 0) {
+    for (int l = 1; l < spacePosition; l++) {
+      letters += y[l];
+    }
+  }
+
+  return letters;
+}
 void setup() {
   Serial.begin(9600);
-  microServo.attach(servoPin);
-  pinMode(13, OUTPUT);
-  pinMode(8, OUTPUT);
-
 }
 
 void loop() {
-  //Вызов функий
-      String lettersOrig = serv(commandLoop(command));
-      Serial.print("");
-
-      String numberOrig = serv(commandLoop(command));
-      Serial.print("");
-
-      //Запрос ID
-      if (commandLoop(command) == "/id") Serial.println("02");
-      else Serial.print("");
-
-      //Работа с сервой
-      if (lettersOrig == "servo")
-      {
-        int corner = numberOrig.toInt(); //если число, то из stringName.toInt()
-        if (corner > 180) Serial.print("");
-        else microServo.write(corner);
-      }
-      else Serial.print("");
-
-      //Работа с led'ом
-      if (lettersOrig == "led" && numberOrig == "on")
-      {
-        digitalWrite(13, HIGH);
-      }
-      else if (lettersOrig == "led" && numberOrig == "off")
-      {
-        digitalWrite(13, LOW);
-      }
-      else Serial.print("");
-
-      //PWM
-      if (lettersOrig == "pwm")
-      {
-        if (numberOrig.toInt() > 255) Serial.print("");
-        else analogWrite(8, numberOrig.toInt());
-      }
-
+  Serial.println(commandName(serv(command)));
+  if (serv(command) == "/id") Serial.println("02");
+  else Serial.print("");
 }
