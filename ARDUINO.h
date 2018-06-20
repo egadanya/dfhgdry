@@ -1,14 +1,8 @@
 #ifndef SERV_H;
 #define SERV_H;
-String command = "";
-String lettersEnd = "";
+extern String command = "";
+extern String lettersEnd = "";
 
-void setup() {
-  Serial.begin(9600);
+serv(String command);
 
-}
-
-void loop() {
-  String serv(command);
-  }
 #endif
